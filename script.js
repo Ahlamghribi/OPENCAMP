@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const scoreButton = document.getElementById('scoreButton');
     let penguinScore = 0;
-    let jumpCount = 0; // Variable to count the number of jumps
+    let personScore = 0; // Declaration of personScore
+    let clickCount = 0; // Declaration of clickCount
 
     const penguin = document.getElementById('penguin');
     const person = document.getElementById('person');
@@ -11,9 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update the score display
     function updateScore() {
-        scoreButton.textContent = 'Score: ' + penguinScore;
+        scoreButton.textContent = 'Score of TUX - ' + penguinScore;
     }
-
     // Move the penguin left
     function moveLeft() {
         penguinPosition -= 10; // Adjust the value to control the movement speed
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         penguin.style.left = penguinPosition + '%';
     }
 
-    // Update the person's position to follow the penguin
+    // Update the person's position
     function updatePersonPosition() {
         // Adjust the person's position based on the penguin's position
         person.style.left = (penguinPosition - 20) + '%';
@@ -63,19 +63,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (checkCollision()) {
             penguinScore++;
             updateScore();
-            jumpCount = 0; // Reset jump count when collision occurs
         }
     }
 
     // Jump and beat when the user clicks on the penguin
     penguin.addEventListener('click', function() {
-        if (jumpCount < 3) {
-            jump(penguin);
-            jumpCount++;
-            checkCollisionAndUpdateScore();
-        } else {
-            showDeathAnimation();
-        }
+        jump(penguin);
+        checkCollisionAndUpdateScore();
     });
 
     // Check for arrow key presses to move the penguin
@@ -132,29 +126,34 @@ document.addEventListener('DOMContentLoaded', function() {
         updateScore();
     }
 
-    // Show death animation after three jumps
-    function showDeathAnimation() {
-        // Display death animation or change game state as needed
-        // For example, you can show a gif or change the background color to indicate game over.
-        console.log('Game Over - Show Death Animation');
-    }
-
     // Update the score display
     function updateScore() {
         scoreButton.textContent = 'Score: ' + penguinScore;
     }
 
+    // Add click event listener to the person
+    person.addEventListener('click', handleClick);
+
+    // Function to handle the click on the person
+    function handleClick() {
+        // Increment click count
+        clickCount++;
+    
+        // Change the image source after 3 clicks
+        if (clickCount === 3) {
+            
+            person.style.backgroundImage = 'dead.gif';
+            // Remove the click event listener after 3 clicks
+    
+            person.style.display = 'none';
+
+        }
+    }
+
     // Check for arrow key presses to make the penguin jump
     document.addEventListener('keydown', function(event) {
         if (event.key === ' ') { // Space bar key
-            if (jumpCount < 3) {
-                jump(penguin);
-                jumpCount++;
-                checkCollisionAndUpdateScore();
-            } else {
-                showDeathAnimation();
-            }
+            jump(penguin);
         }
     });
-
 });
